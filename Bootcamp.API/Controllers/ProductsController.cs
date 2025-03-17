@@ -23,7 +23,7 @@ namespace Bootcamp.API.Controllers
         [HttpGet]
         public IActionResult GetProducts()
         {
-            throw new Exception("veritabanına bağlanma problemi");
+            //throw new Exception("veritabanına bağlanma problemi");
             return _productService.GetAll();
         }
 

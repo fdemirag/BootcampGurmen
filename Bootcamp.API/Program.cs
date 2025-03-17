@@ -1,4 +1,5 @@
 using Bootcamp.API.Filters;
+using Bootcamp.API.Middlewares;
 using Bootcamp.API.Models;
 
 internal class Program
@@ -28,6 +29,8 @@ internal class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+        app.UseMiddleware<IPAddressControlMiddleware>();
+        app.UseGlobalExceptionMiddleware();
 
         app.UseHttpsRedirection();
 
