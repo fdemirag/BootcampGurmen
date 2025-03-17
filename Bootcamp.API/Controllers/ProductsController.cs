@@ -19,10 +19,11 @@ namespace Bootcamp.API.Controllers
         [HttpGet("GetProductsWithPage/{page:int}/{pageSize:int}")]
         public IActionResult GetProductWithPage(int page,int pageSize) { return Ok(); }
 
+        [CustomExceptionFilter]
         [HttpGet]
         public IActionResult GetProducts()
         {
-            
+            throw new Exception("veritabanına bağlanma problemi");
             return _productService.GetAll();
         }
 
