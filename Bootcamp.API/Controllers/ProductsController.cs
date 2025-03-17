@@ -15,6 +15,9 @@ namespace Bootcamp.API.Controllers
             _productService = productService;
         }
 
+        [HttpGet("GetProductsWithPage/{page:int}/{pageSize:int}")]
+        public IActionResult GetProductWithPage(int page,int pageSize) { return Ok(); }
+
         [HttpGet]
         public IActionResult GetProducts()
         {
@@ -24,9 +27,15 @@ namespace Bootcamp.API.Controllers
         [HttpGet("{id}")]
         public IActionResult GetProduct(int id)
         {
+            var result = _productService.GetById(id);
 
+            return new OkObjectResult(result) { StatusCode=result.StatusCode};
+        }
 
-            return Ok(_productService.GetById(id));
+        [HttpGet("/api/[controller]/[action]/{id:int}")]
+        public IActionResult AnyProduct(int id)
+        {
+            return Ok();        
         }
         // S  s
 
@@ -41,8 +50,10 @@ namespace Bootcamp.API.Controllers
         [HttpPut]
         public IActionResult UpdateProduct(Product updateProduct)
         {
-            
-            return _productService.Update(updateProduct);
+
+            var result = _productService.Update(updateProduct);
+
+            return new OkObjectResult(result) { StatusCode = result.StatusCode };
         }
 
 

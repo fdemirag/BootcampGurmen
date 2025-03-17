@@ -15,7 +15,7 @@
         public Product GetById(int id) 
         {
 
-            var product =_products.First(p => p.Id == id);
+            var product =_products.FirstOrDefault(p => p.Id == id);
             return product;
         }
 
