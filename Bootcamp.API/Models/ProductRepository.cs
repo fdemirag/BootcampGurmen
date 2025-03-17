@@ -2,7 +2,7 @@
 {
     public class ProductRepository
     {
-        private List<Product> _products = new List<Product>()
+        private static List<Product> _products = new List<Product>()
         {
             new() { Id = 1, Name = "Kalem 1", Price = 100, Stock = 200 },
             new() { Id = 2, Name = "Kalem 2", Price = 120, Stock = 300 },
@@ -10,6 +10,14 @@
 
         };
         public List<Product> GetAll() => _products;
+
+
+        public Product GetById(int id) 
+        {
+
+            var product =_products.First(p => p.Id == id);
+            return product;
+        }
 
         public void Save(Product newProduct) => _products.Add(newProduct);
 
