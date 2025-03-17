@@ -1,6 +1,6 @@
 ﻿namespace Bootcamp.API.Models
 {
-    public class ProductRepository
+    public class ProductRepository:IProductRepository
     {
         private static List<Product> _products = new List<Product>()
         {

@@ -8,49 +8,49 @@ namespace Bootcamp.API.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly ProductRepository _productRepository;
+        private readonly ProductService _productService;
 
-        public ProductsController()
+        public ProductsController(ProductService productService)
         {
-            _productRepository = new ProductRepository();
+            _productService = productService;
         }
 
         [HttpGet]
         public IActionResult GetProducts()
         {
             
-            return Ok(_productRepository.GetAll());
+            return _productService.GetAll();
         }
         [HttpGet("{id}")]
         public IActionResult GetProduct(int id)
         {
 
 
-            return Ok(_productRepository.GetById(id));
+            return Ok(_productService.GetById(id));
         }
         // S  s
 
         [HttpPost]
         public IActionResult SaveProduct(Product newProduct)
         {
-            _productRepository.Save(newProduct);
+            return _productService.Save(newProduct);
 
-            return CreatedAtAction(nameof(GetProducts), new { id = newProduct.Id }, newProduct);
+            //return CreatedAtAction(nameof(GetProducts), new { id = newProduct.Id }, newProduct);
           //  return Created($"api/products/{newProduct.Id}",newProduct);
         }
         [HttpPut]
         public IActionResult UpdateProduct(Product updateProduct)
         {
-            _productRepository.Update(updateProduct);
-            return Ok();
+            
+            return _productService.Update(updateProduct);
         }
 
 
         [HttpDelete("{id}")]
         public IActionResult DeleteProduct(int id)
         {
-            _productRepository.Delete(id);
-            return Ok();
+
+            return _productService.Delete(id);
         }
     }
 }
