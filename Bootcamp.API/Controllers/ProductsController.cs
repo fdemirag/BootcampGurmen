@@ -1,4 +1,5 @@
-﻿using Bootcamp.API.Models;
+﻿using Bootcamp.API.Filters;
+using Bootcamp.API.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,12 +25,16 @@ namespace Bootcamp.API.Controllers
             
             return _productService.GetAll();
         }
-        [HttpGet("{id}")]
+
+        [ServiceFilter(typeof(NotFoundProductFilter))]
+        [HttpGet("{id:int}")]
         public IActionResult GetProduct(int id)
         {
             var result = _productService.GetById(id);
 
-            return new OkObjectResult(result) { StatusCode=result.StatusCode};
+            var resultObject = new OkObjectResult(result) { StatusCode=result.StatusCode};
+
+            return resultObject;
         }
 
         [HttpGet("/api/[controller]/[action]/{id:int}")]
@@ -47,8 +52,10 @@ namespace Bootcamp.API.Controllers
             //return CreatedAtAction(nameof(GetProducts), new { id = newProduct.Id }, newProduct);
           //  return Created($"api/products/{newProduct.Id}",newProduct);
         }
-        [HttpPut]
-        public IActionResult UpdateProduct(Product updateProduct)
+
+        [ServiceFilter(typeof(NotFoundProductFilter))]
+        [HttpPut("{id}")]
+        public IActionResult UpdateProduct(int id,Product updateProduct)
         {
 
             var result = _productService.Update(updateProduct);
@@ -57,6 +64,7 @@ namespace Bootcamp.API.Controllers
         }
 
 
+        [ServiceFilter(typeof(NotFoundProductFilter))]
         [HttpDelete("{id}")]
         public IActionResult DeleteProduct(int id)
         {

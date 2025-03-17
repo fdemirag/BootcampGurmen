@@ -1,3 +1,4 @@
+using Bootcamp.API.Filters;
 using Bootcamp.API.Models;
 
 internal class Program
@@ -15,6 +16,7 @@ internal class Program
 
 
 
+        builder.Services.AddScoped<NotFoundProductFilter>();
         builder.Services.AddScoped<IProductRepository, ProductRepository>();
         builder.Services.AddScoped<ProductService>();
 
