@@ -8,7 +8,9 @@ namespace Bootcamp.API.DTOs
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public decimal? Price { get; set; }
+        public decimal Price { get; set; }
+        public string Color { get; set; }
+        public int CategoryId { get; set; }
 
         public ProductDto()
         {
@@ -19,7 +21,9 @@ namespace Bootcamp.API.DTOs
         {
             Id = product.Id;
             Name = product.Name;
-            Price = product.Price.Value;
+            Price = product.Price;
+            Color = product.Color;
+            CategoryId = product.CategoryId;
         }
 
     }
