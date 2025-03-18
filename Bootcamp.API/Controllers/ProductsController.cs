@@ -1,6 +1,9 @@
-﻿using Bootcamp.API.DTOs;
+﻿using Bootcamp.API.Commands;
+using Bootcamp.API.DTOs;
 using Bootcamp.API.Filters;
 using Bootcamp.API.Models;
+using Bootcamp.API.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,14 +14,21 @@ namespace Bootcamp.API.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly ProductService _productService;
+        private readonly IMediator _mediator;
 
-        public ProductsController(ProductService productService)
+        public ProductsController(ProductService productService, IMediator mediator)
         {
             _productService = productService;
+            _mediator = mediator;
         }
 
         [HttpGet("GetProductsWithPage/{page:int}/{pageSize:int}")]
-        public IActionResult GetProductWithPage(int page,int pageSize) { return Ok(); }
+        public async Task <IActionResult> GetProductWithPage(int page,int pageSize) 
+        
+        { 
+            return Ok(await _mediator.Send(new ProductWithPageQuery(){Page=page,PageSize=pageSize })); 
+        
+        }
 
         [CustomExceptionFilter]
         [HttpGet]
@@ -47,9 +57,17 @@ namespace Bootcamp.API.Controllers
         // S  s
 
         [HttpPost]
-        public IActionResult SaveProduct(ProductRequestDto newProduct)
+        public async Task<IActionResult> SaveProduct(ProductRequestDto newProduct)
         {
-            return _productService.Save(new Product() { Name = newProduct.Name, Price = newProduct.Price, Stock = newProduct.Stock });
+
+
+
+
+
+            await _mediator.Send(new ProductInsertCommand() { Name = newProduct.Name, Price = newProduct.Price.Value, Stock = newProduct.Stock.Value });
+
+            return Created("", null);
+            //return _productService.Save(new Product() { Name = newProduct.Name, Price = newProduct.Price, Stock = newProduct.Stock });
 
             //return CreatedAtAction(nameof(GetProducts), new { id = newProduct.Id }, newProduct);
           //  return Created($"api/products/{newProduct.Id}",newProduct);
@@ -57,12 +75,14 @@ namespace Bootcamp.API.Controllers
 
         [ServiceFilter(typeof(NotFoundProductFilter))]
         [HttpPut("{id}")]
-        public IActionResult UpdateProduct(int id,Product updateProduct)
+        public async Task<IActionResult> UpdateProduct(int id,Product updateProduct)
         {
 
-            var result = _productService.Update(updateProduct);
+            var result = await _mediator.Send(new ProductUpdateCommand() { Id = id,Name=updateProduct.Name,Price=updateProduct.Price.Value,Stock=updateProduct.Stock.Value }) ;
 
-            return new OkObjectResult(result) { StatusCode = result.StatusCode };
+
+
+            return new ObjectResult(result) { StatusCode = result.StatusCode };
         }
 
 
