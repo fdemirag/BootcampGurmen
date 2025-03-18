@@ -1,4 +1,5 @@
-﻿using Bootcamp.API.Filters;
+﻿using Bootcamp.API.DTOs;
+using Bootcamp.API.Filters;
 using Bootcamp.API.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -46,9 +47,9 @@ namespace Bootcamp.API.Controllers
         // S  s
 
         [HttpPost]
-        public IActionResult SaveProduct(Product newProduct)
+        public IActionResult SaveProduct(ProductRequestDto newProduct)
         {
-            return _productService.Save(newProduct);
+            return _productService.Save(new Product() { Name = newProduct.Name, Price = newProduct.Price, Stock = newProduct.Stock });
 
             //return CreatedAtAction(nameof(GetProducts), new { id = newProduct.Id }, newProduct);
           //  return Created($"api/products/{newProduct.Id}",newProduct);
