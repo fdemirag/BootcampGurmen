@@ -1,28 +1,29 @@
-﻿using Bootcamp.API.DTOs;
-using Bootcamp.API.Models;
+﻿using AutoMapper;
+using Bootcamp.API.DTOs;
+using Bootcamp.API.Repositories;
 using MediatR;
 
 namespace Bootcamp.API.Queries
 {
     public class ProductWithPageQueryHandler : IRequestHandler<ProductWithPageQuery, ResponseDto<List<ProductDto>>>
     {
-        //private readonly IProductRepository _productRepository;
+        private readonly IProductRepository _productRepository;
+        private readonly IMapper _mapper;
 
-        //public ProductWithPageQueryHandler(IProductRepository productRepository)
-        //{
-        //    _productRepository = productRepository;
-        //}
-
-        //public Task<ResponseDto<List<ProductDto>>> Handle(ProductWithPageQuery request, CancellationToken cancellationToken)
-        //{
-        //    var products = _productRepository.GetAll().Skip((request.Page - 1) * request.PageSize).Take(request.PageSize);
-        //    var productDtos = new List<ProductDto>();
-        //    products.ToList().ForEach(x => productDtos.Add(new ProductDto(x)));
-        //    return Task.FromResult(ResponseDto<List<ProductDto>>.Success(productDtos, 200));
-        //}
-        public Task<ResponseDto<List<ProductDto>>> Handle(ProductWithPageQuery request, CancellationToken cancellationToken)
+        public ProductWithPageQueryHandler(IProductRepository productRepository, IMapper mapper)
         {
-            throw new NotImplementedException();
+            _productRepository = productRepository;
+            _mapper = mapper;
+        }
+
+        
+        public async Task<ResponseDto<List<ProductDto>>> Handle(ProductWithPageQuery request, CancellationToken cancellationToken)
+        {
+       
+        
+            var products = await _productRepository.GetAllWithPageParameters(request.Page, request.PageSize);
+            return  ResponseDto<List<ProductDto>>.Success(_mapper.Map<List<ProductDto>>(products),200);
+            
         }
     }
 }
