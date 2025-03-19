@@ -32,22 +32,23 @@ internal class Program
         //builder.Services.AddScoped<ProductService>();
 
         builder.Services.AddScoped<IProductRepository, ProductRepository>();
+        builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 
 
 
         builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
-
-        builder.Services.AddScoped<IDbConnection>(sp => new NpgsqlConnection(builder.Configuration.GetConnectionString("Postgresql")));
-
-        //builder.Services.AddScoped<IDbTransaction>(sp =>
-        //{
-
-        //    var connection = sp.GetRequiredService<IDbConnection>();
-        //    connection.Open();
-        //    return connection.BeginTransaction();
-
-
-        //});
+        builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+      //  builder.Services.AddScoped<IDbConnection>(sp => new NpgsqlConnection(builder.Configuration.GetConnectionString("Postgresql")));
+        builder.Services.AddScoped<IDbConnection>(sp => new NpgsqlConnection(builder.Configuration.GetConnectionString("Postgresqlformac")));
+        
+     
+        builder.Services.AddScoped<IDbTransaction>(sp =>
+        {
+            var connection = sp.GetRequiredService<IDbConnection>();
+            connection.Open();
+            return connection.BeginTransaction();
+            
+        });
 
 
         var app = builder.Build();
